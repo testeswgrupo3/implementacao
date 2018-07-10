@@ -127,32 +127,17 @@
 			nome : "Fulano da silva",
 			listaTurmas : []
 		},
-
-
 		];
 		$( document ).ready( function(){
 			$(".grupoAluno").hide();
-
-
-
-
-
-
-
 			var add= "";
 			for(var i=0; i<mockTumas.length;i++){
-
 				add+="<option value='"+ mockTumas[i].id+"'>"+mockTumas[i].nome+"</option>";
-
 			}
-
 			$("#turma").append(add);
-
 			$("#btnTurma").click(function(){
-
 				var addAluno= "";
 				var b = $("#turma").val();
-
 				console.log("b");
 				console.log(b);
 				var listaAlunosInserir = _.filter(mockAlunos,function(o){
@@ -166,39 +151,25 @@
 
 
 				}
-
 				$("#listaAlunos").append(addAluno);
-
-
 				$("#nomeTurma").text(_.find(mockTumas,{"id": parseInt(b)}).nome);
-
 				$(".grupoAluno").show();
 				$(".grupoTurma").hide();
 			})
-
 
 			$("#btnAlunos").click(function(){
 				// console.log();
 
 				var size = $("#listaAlunos").find("input").length;
 				var ids = [];
-
-
 				var turmasBateHorario = [];
-
-
-
 				var idTurma = parseInt($("#turma").val());
 				var turma = _.find(mockTumas,{"id": idTurma});
 
 				for (var i = 1; i <= size; i++) {
 
 					if($("[data-numAluno='aluno"+i+"']").is(':checked')){
-
 						var idAluno = parseInt($("[data-numAluno='aluno"+i+"']").attr('data-vlId'));
-
-
-
 						var aluno = _.find(mockAlunos,{"id": idAluno});
 						if (aluno.listaTurmas.indexOf(idTurma) == -1){
 
@@ -211,9 +182,7 @@
 								}
 
 							}
-
 							if(!btH){
-
 								ids.push(idAluno);
 							}else{
 								alert("O aluno "+aluno.nome+" tem aula nesse horario");
@@ -223,58 +192,40 @@
 							alert(aluno.nome + " já existe nessa turma");
 
 						}
-
-
-
-
 					}
 				}
-
-
 				if((turma.quantidadeAlunosCadastrados + ids.length) <= turma.quantidadeMaxAlunos){
-
-
-
-
-					var result = "{";
-					result += "idTurma: " + $("#turma").val()+";";
-					result += "listaAlunos: "+String(ids);
-					result+= "}";
+					var result = '{';
+					result += '"idTurma": ' + $("#turma").val()+',';
+					result += '"listaAlunos" :[ '+String(ids);
+					result+= ']}';
 					$("#result").text("");
 					$("#result").append(result);
 				}else{
 					alert("Número máximo de alunos atingido");
 				}
-
-
 			})
-
-			function bateHorario(turmaTentativa, turmaCadastrada) {
-				var naoPode = false;
-				for(var i = 0, length1 = turmaTentativa.diaHora.length; i < length1; i++){
-					var t = _.find(turmaCadastrada.diaHora, {"desc": turmaTentativa.diaHora[i].desc});
-					if(t){
-						if(turmaTentativa.diaHora[i].horaInicio >= t.horaInicio && turmaTentativa.diaHora[i].horaInicio < t.horaFim){
-								// console.log("não pode");
-								naoPode = true;
-							}
-							if(turmaTentativa.diaHora[i].horaFim > t.horaInicio && turmaTentativa.diaHora[i].horaFim <= t.horaFim){
-								// console.log("não pode");
-								naoPode = true;
-							}
-
-						}
-					}
-
-					return naoPode;
-
-				}
-
 			// console.log("bate Horario");
 			// console.log(bateHorario(mockTumas[0],mockTumas[2]));
-
-
 		})
+		function bateHorario(turmaTentativa, turmaCadastrada) {
+			var naoPode = false;
+			for(var i = 0; i < turmaTentativa.diaHora.length; i++){
+				var t = _.find(turmaCadastrada.diaHora, {"desc": turmaTentativa.diaHora[i].desc});
+				if(t){
+					if(turmaTentativa.diaHora[i].horaInicio >= t.horaInicio && turmaTentativa.diaHora[i].horaInicio < t.horaFim){
+							// console.log("não pode");
+							naoPode = true;
+						}
+						if(turmaTentativa.diaHora[i].horaFim > t.horaInicio && turmaTentativa.diaHora[i].horaFim <= t.horaFim){
+							// console.log("não pode");
+							naoPode = true;
+						}
+
+					}
+				}
+				return naoPode;
+			}
 	</script>
 </head>
 
@@ -307,10 +258,13 @@
 </style>
 </head>
 <body>
-	<div id="qunit"></div>
-	<div id="qunit-fixture">
-	<script type="text/javascript" src="testes.js"></script>
-	
+	<div>
+		<div id="qunit"></div>
+		<div id="qunit-fixture">
+		<script type="text/javascript" src="testes.js"></script>
+	</div>
+
+
 	<div class="container-fluid">
 		<div class="row content">
 			<div class="col-sm-3 sidenav">
