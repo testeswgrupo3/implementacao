@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/lodash.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.1.css">
+	<script src="https://code.jquery.com/qunit/qunit-2.6.1.js"></script>
+	<script>
+		var mockTumas = [
+		{
+			id : 1,
+			nome : "Turma Teste de software",
+			quantidadeMaxAlunos: 20,
+			quantidadeAlunosCadastrados:5,
+			diaHora: [
+			{
+				desc: "Terça",
+				horaInicio : "21",
+				horaFim : "23",
+			},
+			{
+				desc: "Quinta",
+				horaInicio : "19",
+				horaFim : "21",
+			}
+			]
+		},
+		{
+			id : 2,
+			nome : "Turma ED 2",
+			quantidadeMaxAlunos: 7,
+			quantidadeAlunosCadastrados:5,
+			diaHora: [
+			{
+				desc: "Terça",
+				horaInicio : "14",
+				horaFim : "16",
+			},
+			{
+				desc: "Quinta",
+				horaInicio : "14",
+				horaFim : "16",
+			}
+			]
+		},
+		{
+			id : 3,
+			nome : "Turma Estrutura dados",
+			quantidadeMaxAlunos: 20,
+			quantidadeAlunosCadastrados:15,
+			diaHora: [
+			{
+				desc: "Terça",
+				horaInicio : "18",
+				horaFim : "20",
+			},
+			{
+				desc: "Quinta",
+				horaInicio : "18",
+				horaFim : "20",
+			}
+			]
+		},
+		{
+			id : 4,
+			nome : "Turma Algoritmos",
+			quantidadeMaxAlunos: 20,
+			quantidadeAlunosCadastrados:0,
+			diaHora: [
+			{
+				desc: "Terça",
+				horaInicio : "19",
+				horaFim : "21",
+			},
+			{
+				desc: "Quinta",
+				horaInicio : "21",
+				horaFim : "23",
+			}
+			]
+		},
+
+		];
+
+		var mockAlunos = [
+		{
+			id : 1458,
+			nome : "José da silva",
+			listaTurmas : [1,2]
+		},
+		{
+			id : 256,
+			nome : "Paulo Henrique",
+			listaTurmas : [1]
+		},
+		{
+			id : 3546,
+			nome : "Maria joão",
+			listaTurmas : [1]
+		},
+		{
+			id : 456,
+			nome : "João maria",
+			listaTurmas : [4]
+		},
+		{
+			id : 556,
+			nome : "Pedro josé",
+			listaTurmas : [3]
+		},
+		{
+			id : 79,
+			nome : "Ana francista",
+			listaTurmas : []
+		},
+		{
+			id : 8999,
+			nome : "Maria Juliana ",
+			listaTurmas : []
+		},
+		{
+			id : 9569,
+			nome : "Fulano da silva",
+			listaTurmas : []
+		},
+
+
+		];
+		$( document ).ready( function(){
+			$(".grupoAluno").hide();
+
+
+
+
+
+
+
+			var add= "";
+			for(var i=0; i<mockTumas.length;i++){
+
+				add+="<option value='"+ mockTumas[i].id+"'>"+mockTumas[i].nome+"</option>";
+
+			}
+
+			$("#turma").append(add);
+
+			$("#btnTurma").click(function(){
+
+				var addAluno= "";
+				var b = $("#turma").val();
+
+				console.log("b");
+				console.log(b);
+				var listaAlunosInserir = _.filter(mockAlunos,function(o){
+					console.log(o);
+					if(o.listaTurmas.indexOf(parseInt(b)) == -1){
+						return o;
+					}
+				})
+				for(var i=0; i<listaAlunosInserir.length;i++){
+					addAluno+="<div><input type='checkbox' data-numAluno='aluno"+(i+1)+"' data-vlId="+listaAlunosInserir[i].id+" id='aluno"+listaAlunosInserir[i].id+"'> <label for='aluno"+listaAlunosInserir[i].id+"'>"+listaAlunosInserir[i].nome+"</label></div>";
+
+
+				}
+
+				$("#listaAlunos").append(addAluno);
+
+
+				$("#nomeTurma").text(_.find(mockTumas,{"id": parseInt(b)}).nome);
+
+				$(".grupoAluno").show();
+				$(".grupoTurma").hide();
+			})
+
+
+			$("#btnAlunos").click(function(){
+				// console.log();
+
+				var size = $("#listaAlunos").find("input").length;
+				var ids = [];
+
+
+				var turmasBateHorario = [];
+
+
+
+				var idTurma = parseInt($("#turma").val());
+				var turma = _.find(mockTumas,{"id": idTurma});
+
+				for (var i = 1; i <= size; i++) {
+
+					if($("[data-numAluno='aluno"+i+"']").is(':checked')){
+
+						var idAluno = parseInt($("[data-numAluno='aluno"+i+"']").attr('data-vlId'));
+
+
+
+						var aluno = _.find(mockAlunos,{"id": idAluno});
+						if (aluno.listaTurmas.indexOf(idTurma) == -1){
+
+							var btH = false;
+							for(var j = 0, length1 = aluno.listaTurmas.length; j < length1; j++){
+								var turmaJ = _.find(mockTumas,{"id": aluno.listaTurmas[j]});
+								if (bateHorario(turma,turmaJ)) {
+									btH = true;
+									break;
+								}
+
+							}
+
+							if(!btH){
+
+								ids.push(idAluno);
+							}else{
+								alert("O aluno "+aluno.nome+" tem aula nesse horario");
+							}
+						}else{
+							// console.log("ja existe")
+							alert(aluno.nome + " já existe nessa turma");
+
+						}
+
+
+
+
+					}
+				}
+
+
+				if((turma.quantidadeAlunosCadastrados + ids.length) <= turma.quantidadeMaxAlunos){
+
+
+
+
+					var result = "{";
+					result += "idTurma: " + $("#turma").val()+";";
+					result += "listaAlunos: "+String(ids);
+					result+= "}";
+					$("#result").text("");
+					$("#result").append(result);
+				}else{
+					alert("Número máximo de alunos atingido");
+				}
+
+
+			})
+
+			function bateHorario(turmaTentativa, turmaCadastrada) {
+				var naoPode = false;
+				for(var i = 0, length1 = turmaTentativa.diaHora.length; i < length1; i++){
+					var t = _.find(turmaCadastrada.diaHora, {"desc": turmaTentativa.diaHora[i].desc});
+					if(t){
+						if(turmaTentativa.diaHora[i].horaInicio >= t.horaInicio && turmaTentativa.diaHora[i].horaInicio < t.horaFim){
+								// console.log("não pode");
+								naoPode = true;
+							}
+							if(turmaTentativa.diaHora[i].horaFim > t.horaInicio && turmaTentativa.diaHora[i].horaFim <= t.horaFim){
+								// console.log("não pode");
+								naoPode = true;
+							}
+
+						}
+					}
+
+					return naoPode;
+
+				}
+
+			// console.log("bate Horario");
+			// console.log(bateHorario(mockTumas[0],mockTumas[2]));
+
+
+		})
+	</script>
+</head>
+
+<style>
+	/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+	.row.content { height: 760px}
+
+	/* Set gray background color and 100% height */
+	.sidenav {
+		background-color: #f1f1f1;
+		height: 100%;
+
+	}
+
+	/* Set black background color, white text and some padding */
+	footer {
+		background-color: #555;
+		color: white;
+		padding: 15px;
+	}
+
+	/* On small screens, set height to 'auto' for sidenav and grid */
+	@media screen and (max-width: 767px) {
+		.sidenav {
+			height: auto;
+			padding: 15px;
+		}
+		.row.content {height: auto;}
+	}
+</style>
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture">
+	<script type="text/javascript" src="testes.js"></script>
+	
+	<div class="container-fluid">
+		<div class="row content">
+			<div class="col-sm-3 sidenav">
+				<h4>Trabalho TS - Inclusão de Turmas</h4>
+				<ul class="nav nav-pills nav-stacked">
+					<li class="active">Home</a></li>
+				</ul><br>
+
+			</div>
+
+			<div class="col-sm-9">
+				<h1 id="teste"></h1>
+
+
+				<div class="grupoTurma">
+					<h3 class="form-group">
+						<label for="turma"> Escolha uma turma</label>
+					</h3>
+					<div class="form-group">
+
+						<select name="turma" id="turma">
+							<option value="">Selecione uma turma</option>
+
+						</select>
+					</div>
+
+					<div class="form-group">
+
+						<button id="btnTurma" class="btn btn-success">Selecionar</button>
+					</div>
+				</div>
+
+				<div class="grupoAluno">
+					<div >
+						<h1>
+							Nome Turma : <span id="nomeTurma"></span>
+						</h1>
+						<label for="turma"> Marque os alunos</label>
+					</div>
+					<div id="listaAlunos" class="form-group">
+						<!-- <input type="checkbox" id="aluno1"> <label for="aluno1">aluno1</label> -->
+					</div>
+
+					<div class="form-group">
+
+						<button id="btnAlunos" class="btn btn-success">Salvar</button>
+					</div>
+
+
+					<h3 id="result">
+
+					</h3>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<footer class="container-fluid">
+		<p>trabalho Teste de Software</p>
+	</footer>
+
+</body>
+
+
+
+
+
+</html>
