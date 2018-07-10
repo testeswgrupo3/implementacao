@@ -7,127 +7,55 @@
 	<script src="js/lodash.min.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.1.css">
-	<script src="https://code.jquery.com/qunit/qunit-2.6.1.js"></script>
 	<script>
-		var mockTumas = [
-		{
-			id : 1,
-			nome : "Turma Teste de software",
-			quantidadeMaxAlunos: 20,
-			quantidadeAlunosCadastrados:5,
-			diaHora: [
-			{
-				desc: "Terça",
-				horaInicio : "21",
-				horaFim : "23",
-			},
-			{
-				desc: "Quinta",
-				horaInicio : "19",
-				horaFim : "21",
-			}
-			]
-		},
-		{
-			id : 2,
-			nome : "Turma ED 2",
-			quantidadeMaxAlunos: 7,
-			quantidadeAlunosCadastrados:5,
-			diaHora: [
-			{
-				desc: "Terça",
-				horaInicio : "14",
-				horaFim : "16",
-			},
-			{
-				desc: "Quinta",
-				horaInicio : "14",
-				horaFim : "16",
-			}
-			]
-		},
-		{
-			id : 3,
-			nome : "Turma Estrutura dados",
-			quantidadeMaxAlunos: 20,
-			quantidadeAlunosCadastrados:15,
-			diaHora: [
-			{
-				desc: "Terça",
-				horaInicio : "18",
-				horaFim : "20",
-			},
-			{
-				desc: "Quinta",
-				horaInicio : "18",
-				horaFim : "20",
-			}
-			]
-		},
-		{
-			id : 4,
-			nome : "Turma Algoritmos",
-			quantidadeMaxAlunos: 20,
-			quantidadeAlunosCadastrados:0,
-			diaHora: [
-			{
-				desc: "Terça",
-				horaInicio : "19",
-				horaFim : "21",
-			},
-			{
-				desc: "Quinta",
-				horaInicio : "21",
-				horaFim : "23",
-			}
-			]
-		},
-
+	var mockTumas = [
+		{"id":"1",
+		"nome":"Project analisys",
+		"quantidadeMaxAlunos":74,
+		"quantidadeAlunosCadastrados":"4",
+		"diaHora":
+		[{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]},
+		{"id":"2",
+		"nome":"Nice examples",
+		"quantidadeMaxAlunos":59,
+		"quantidadeAlunosCadastrados":"2",
+		"diaHora":[{"desc":"This is a nice description about this session.","data":"23:22:56 27-Feb-50496"}]},
+		{"id":"3",
+		"nome":"Session 1: Introduction to Web",
+		"quantidadeMaxAlunos":50,
+		"quantidadeAlunosCadastrados":"0",
+		"diaHora":[{"desc":"This is a nice description about this session.","data":"23:22:56 02-Jun-50493"}]},
+		{"id":"4",
+		"nome":"Session 2: Databse integration",
+		"quantidadeMaxAlunos":37,
+		"quantidadeAlunosCadastrados":"0",
+		"diaHora":[{"desc":"This is a nice description about this session.","data":"23:22:56 06-Nov-50509"}]},
+		{"id":"5",
+		"nome":"Project analisys 2",
+		"quantidadeMaxAlunos":74,
+		"quantidadeAlunosCadastrados":"4",
+		"diaHora":
+		[{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
 		];
 
 		var mockAlunos = [
-		{
-			id : 1458,
-			nome : "José da silva",
-			listaTurmas : [1,2]
-		},
-		{
-			id : 256,
-			nome : "Paulo Henrique",
-			listaTurmas : [1]
-		},
-		{
-			id : 3546,
-			nome : "Maria joão",
-			listaTurmas : [1]
-		},
-		{
-			id : 456,
-			nome : "João maria",
-			listaTurmas : [4]
-		},
-		{
-			id : 556,
-			nome : "Pedro josé",
-			listaTurmas : [3]
-		},
-		{
-			id : 79,
-			nome : "Ana francista",
-			listaTurmas : []
-		},
-		{
-			id : 8999,
-			nome : "Maria Juliana ",
-			listaTurmas : []
-		},
-		{
-			id : 9569,
-			nome : "Fulano da silva",
-			listaTurmas : []
-		},
-		];
+			{"id":"1",
+			"nome":"Student Imprudent",
+			"listaTurmas":["1","2"]},
+			{"id":"2",
+			"nome":"Student Concludent",
+			"listaTurmas":["1"]},
+			{"id":"4",
+			"nome":"New Student",
+			"listaTurmas":["1"]}
+		]
+		function converteData(data){
+			var aux = data.split(" ");
+			var horario = aux[0].split(":");
+			var dia = aux[1].split("-");
+			console.log(dia[2]+" "+dia[1]+" "+dia[0]+" "+horario[0]+" "+horario[1]+" "+horario[2]+" "+0);
+			return{ano:dia[2],mes:dia[1],dia:dia[0],hora:horario[0],min:horario[1],seg:horario[2]}
+		}
 		$( document ).ready( function(){
 			$(".grupoAluno").hide();
 			var add= "";
@@ -142,7 +70,7 @@
 				console.log(b);
 				var listaAlunosInserir = _.filter(mockAlunos,function(o){
 					console.log(o);
-					if(o.listaTurmas.indexOf(parseInt(b)) == -1){
+					if(o.listaTurmas.indexOf(b) == '-1'){
 						return o;
 					}
 				})
@@ -152,7 +80,7 @@
 
 				}
 				$("#listaAlunos").append(addAluno);
-				$("#nomeTurma").text(_.find(mockTumas,{"id": parseInt(b)}).nome);
+				$("#nomeTurma").text(_.find(mockTumas,{"id": b}).nome);
 				$(".grupoAluno").show();
 				$(".grupoTurma").hide();
 			})
@@ -163,15 +91,15 @@
 				var size = $("#listaAlunos").find("input").length;
 				var ids = [];
 				var turmasBateHorario = [];
-				var idTurma = parseInt($("#turma").val());
+				var idTurma = $("#turma").val();
 				var turma = _.find(mockTumas,{"id": idTurma});
 
 				for (var i = 1; i <= size; i++) {
 
 					if($("[data-numAluno='aluno"+i+"']").is(':checked')){
-						var idAluno = parseInt($("[data-numAluno='aluno"+i+"']").attr('data-vlId'));
+						var idAluno = $("[data-numAluno='aluno"+i+"']").attr('data-vlId');
 						var aluno = _.find(mockAlunos,{"id": idAluno});
-						if (aluno.listaTurmas.indexOf(idTurma) == -1){
+						if (aluno.listaTurmas.indexOf(idTurma) == '-1'){
 
 							var btH = false;
 							for(var j = 0, length1 = aluno.listaTurmas.length; j < length1; j++){
@@ -183,7 +111,7 @@
 
 							}
 							if(!btH){
-								ids.push(idAluno);
+								ids.push('"'+idAluno+'"');
 							}else{
 								alert("O aluno "+aluno.nome+" tem aula nesse horario");
 							}
@@ -194,9 +122,9 @@
 						}
 					}
 				}
-				if((turma.quantidadeAlunosCadastrados + ids.length) <= turma.quantidadeMaxAlunos){
+				if((Number(turma.quantidadeAlunosCadastrados) + ids.length) <= Number(turma.quantidadeMaxAlunos)){
 					var result = '{';
-					result += '"idTurma": ' + $("#turma").val()+',';
+					result += '"idTurma": ' + '"'+$("#turma").val()+'",';
 					result += '"listaAlunos" :[ '+String(ids);
 					result+= ']}';
 					$("#result").text("");
@@ -209,23 +137,28 @@
 			// console.log(bateHorario(mockTumas[0],mockTumas[2]));
 		})
 		function bateHorario(turmaTentativa, turmaCadastrada) {
-			var naoPode = false;
-			for(var i = 0; i < turmaTentativa.diaHora.length; i++){
-				var t = _.find(turmaCadastrada.diaHora, {"desc": turmaTentativa.diaHora[i].desc});
-				if(t){
-					if(turmaTentativa.diaHora[i].horaInicio >= t.horaInicio && turmaTentativa.diaHora[i].horaInicio < t.horaFim){
-							// console.log("não pode");
-							naoPode = true;
+			var coincide = false;
+			console.log("<Comparando>");
+			console.log(turmaTentativa);
+			console.log(turmaCadastrada);
+			console.log("</Comparando>");
+			for(var j = 0; j < turmaCadastrada.diaHora.length; j++){
+				var dataTurmaCadastrada = converteData(turmaCadastrada.diaHora[j].data);
+				for(var i = 0; i < turmaTentativa.diaHora.length; i++){
+					var dataTurmaTentativa = converteData(turmaTentativa.diaHora[i].data);
+					if(dataTurmaTentativa.ano == dataTurmaCadastrada.ano){
+						if(dataTurmaTentativa.mes == dataTurmaCadastrada.mes){
+							if(dataTurmaTentativa.dia == dataTurmaCadastrada.dia){
+								if(dataTurmaTentativa.hora == dataTurmaCadastrada.hora){
+										coincide = true;
+								}
+							}
 						}
-						if(turmaTentativa.diaHora[i].horaFim > t.horaInicio && turmaTentativa.diaHora[i].horaFim <= t.horaFim){
-							// console.log("não pode");
-							naoPode = true;
-						}
-
 					}
 				}
-				return naoPode;
 			}
+			return coincide;
+		}
 	</script>
 </head>
 
@@ -258,13 +191,6 @@
 </style>
 </head>
 <body>
-	<div>
-		<div id="qunit"></div>
-		<div id="qunit-fixture">
-		<script type="text/javascript" src="testes.js"></script>
-	</div>
-
-
 	<div class="container-fluid">
 		<div class="row content">
 			<div class="col-sm-3 sidenav">

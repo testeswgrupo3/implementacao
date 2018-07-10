@@ -13,8 +13,8 @@ function verificaAlunoTurma(idTurma,aluno){
   }
   return false;
 }
+  var idTuma = "2";
 QUnit.test( "verifica se é possivel selecionar uma turma", function( assert ) {
-      var idTuma = 1;
       $("#turma").val(idTuma);
       $("#btnTurma").click();
       var turma = _.find(mockTumas,{"id" : idTuma});
@@ -23,12 +23,22 @@ QUnit.test( "verifica se é possivel selecionar uma turma", function( assert ) {
 });
 QUnit.test( "vrifica se os alunos visualizados não pertencem a turma selecionada", function( assert ) {
       var list = $("#listaAlunos div input");
-      for(var i=0;i<list.length;i++){
-          assert.notOk( verificaAlunoTurma(1,_.find(mockAlunos,{"id": parseInt(list[i].getAttribute("data-vlid"))})),"Aluno_"+ list[i].getAttribute("data-vlid") +"_ok!" );
+      if(list.length>0){
+        for(var i=0;i<list.length;i++){
+            assert.notOk( verificaAlunoTurma(idTuma,_.find(mockAlunos,{"id": list[i].getAttribute("data-vlid")})),"Aluno_"+ list[i].getAttribute("data-vlid") +"_ok!" );
+        }
+      }else{
+        var cont = 0;
+        for(var i=0;i<mockAlunos.length;i++){
+            assert.ok( verificaAlunoTurma(idTuma,mockAlunos[i]),"Aluno_"+ mockAlunos[i].id +"_pertence a turma!" );
+            cont++;
+        }
+          assert.ok( cont == mockAlunos.length,"Todos os alunos já estão nesta turma" );
       }
+
 });
 
-function alunoDisponivel(aluno,tuma){
+function alunoDisponivel(aluno,turma){
   for(var j = 0; j < aluno.listaTurmas.length; j++){
     var turmaJ = _.find(mockTumas,{"id": aluno.listaTurmas[j]});
     console.log(turmaJ);
@@ -42,19 +52,24 @@ function alunoDisponivel(aluno,tuma){
 QUnit.test( "verifica se os alunos a serem inseridos não possuem coincidencia de horário", function( assert ) {
 
       var list = $("#listaAlunos div input");
+      if(list.length>0){
+        for(var i=0;i<list.length;i++){
+            list[i].click();
+        }
+        $("#btnAlunos").click();
 
-      for(var i=0;i<list.length;i++){
-          list[i].click();
+        console.log($("#result").text());
+        var resultado = JSON.parse($("#result").text());
+        var turmaAtual = _.find(mockTumas,{"id": resultado.idTurma});
+        console.log("TurmaAtual");
+        console.log(turmaAtual);
+        for(var i=0;i<resultado.listaAlunos.length;i++){
+            var alunoAtual = _.find(mockAlunos,{"id": resultado.listaAlunos[i]});
+            console.log(alunoAtual);
+            assert.ok( alunoDisponivel(alunoAtual,turmaAtual),"Aluno "+ alunoAtual.id+" está Disponivel");
+        }
+      }else{
+        assert.ok( list.length==0,"Não é possivel inserir nenhum aluno na turma");
       }
-      $("#btnAlunos").click();
 
-      console.log($("#result").text());
-      var resultado = JSON.parse($("#result").text());
-      var turmaAtual = _.find(mockTumas,{"id": resultado.idTurma});
-      console.log(turmaAtual);
-      for(var i=0;i<resultado.listaAlunos.length;i++){
-          var alunoAtual = _.find(mockAlunos,{"id": resultado.listaAlunos[i]});
-          console.log(alunoAtual);
-          assert.ok( alunoDisponivel(alunoAtual,turmaAtual),"Aluno "+ alunoAtual.id+" está Disponivel");
-      }
 });
