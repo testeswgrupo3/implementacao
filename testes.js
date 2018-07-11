@@ -150,7 +150,7 @@ var dataTeste =
                                           {"id":"4",
                                           "nome":"New Student",
                                           "listaTurmas":["1"]}],
-                                          turma: {"id":"1",
+                                          turma: {"id":"7",
                                                 "nome":"Fisica",
                                                 "quantidadeMaxAlunos":71,
                                                 "quantidadeAlunosCadastrados":"70",
@@ -167,14 +167,14 @@ var dataTeste =
                                             {"id":"4",
                                             "nome":"New Student",
                                             "listaTurmas":["1"]}],
-                                            turma: {"id":"1",
+                                            turma: {"id":"7",
                                                   "nome":"Fisica",
                                                   "quantidadeMaxAlunos":71,
                                                   "quantidadeAlunosCadastrados":"0",
                                                   "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
                                             }
                                         ],
-                              resultadoEsperado: [true,false]},
+                              resultadoEsperado: [false,true]},
                         analiseValorLimite:{entrada:[
                                             {
                                               //Matricular um numero de alunos que não supere em 1 a capacidade da turma
@@ -228,13 +228,13 @@ var dataTeste =
                                                         "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
                                                   }
                                                 ],
-                                  resultadoEsperado:[false,false,true]}
+                                  resultadoEsperado:[true,true,false]}
                         },
 
   cadastro:{entrada:{"id":"1",
                     "nome":"Student Imprudent",
                     "listaTurmas":["1","2"]},
-            resultadosEspereados:{adicionado: true,removido:false}
+            resultadoEsperado:{adicionado: true,removido:false}
          }
 }
 
@@ -265,5 +265,63 @@ QUnit.test( "Testa Bate horario", function( assert ) {
         assert.ok(resultado==dadosValorLimite.resultadoEsperado[i] ,"Passou! "+JSON.stringify(notificacao))
 
       }
+
+});
+QUnit.test( "Filtrar alunos que não pertencem a turma", function( assert ) {
+      var resultado = filtrarAlunos(dataTeste.filtrarAlunos.entrada.alunos,dataTeste.filtrarAlunos.entrada.idTurma);
+      assert.ok( resultado.length==dataTeste.filtrarAlunos.resultadoEsperado.length,"Tamanho do resultado esta correto!")
+      for(var i=0;i<resultado.length;i++){
+        assert.ok( resultado[i].id==dataTeste.filtrarAlunos.resultadoEsperado[i].id,"Aluno "+resultado[i].id+" ok")
+      }
+});
+
+QUnit.test( "Testa verificar Capacidade Turma", function( assert ) {
+      //Iniciando os dados para a realizacao dos teste
+      var dadosClasseEquivalencia = dataTeste.verificarCapacidadeTurma.classesEquivalencia;
+      var dadosValorLimite = dataTeste.verificarCapacidadeTurma.analiseValorLimite;
+      var numTestesClasseEquivalencia = dadosClasseEquivalencia.entrada.length;
+      var numTestesValorLimite =  dadosValorLimite.entrada.length;
+
+      //Efetuando os testes com classe de classes equivalencia
+      for(var i=0;i<numTestesClasseEquivalencia;i++){
+        cadastro.idTurma = dadosClasseEquivalencia.entrada[i].turma.id;
+        for(var j=0;j<dadosClasseEquivalencia.entrada[i].alunos.length;j++){
+            cadastro.adicionarAluno(dadosClasseEquivalencia.entrada[i].alunos[j].id);
+        }
+        var vagas =Number(dadosClasseEquivalencia.entrada[i].turma.quantidadeMaxAlunos)-Number(dadosClasseEquivalencia.entrada[i].turma.quantidadeAlunosCadastrados);
+        var notificacao = {turma:dadosClasseEquivalencia.entrada[i].turma.id,vagas:vagas,tentouInserir:dadosClasseEquivalencia.entrada[i].alunos.length}
+        assert.ok(verificaCapacidadeTurma(dadosClasseEquivalencia.entrada[i].turma)==dadosClasseEquivalencia.resultadoEsperado[i] ,"Passou! "+JSON.stringify(notificacao));
+        cadastro.idTurma = null;
+        cadastro.listaAlunos=[];
+      }
+
+      for(var i=0;i<numTestesValorLimite;i++){
+        cadastro.idTurma = dadosValorLimite.entrada[i].turma.id;
+        for(var j=0;j<dadosValorLimite.entrada[i].alunos.length;j++){
+            cadastro.adicionarAluno(dadosValorLimite.entrada[i].alunos[j].id);
+        }
+        var vagas =Number(dadosValorLimite.entrada[i].turma.quantidadeMaxAlunos)-Number(dadosValorLimite.entrada[i].turma.quantidadeAlunosCadastrados);
+        var notificacao = {turma:dadosValorLimite.entrada[i].turma.id,vagas:vagas,tentouInserir:dadosValorLimite.entrada[i].alunos.length}
+        assert.ok(verificaCapacidadeTurma(dadosValorLimite.entrada[i].turma)==dadosValorLimite.resultadoEsperado[i] ,"Passou! "+JSON.stringify(notificacao));
+        cadastro.idTurma = null;
+        cadastro.listaAlunos=[];
+      }
+
+});
+
+QUnit.test( "Remover aluno com cadastro pendente", function( assert ) {
+      function verificaAlunoListaCadastro(idAluno){
+        var index = cadastro.listaAlunos.indexOf(idAluno);
+        if ( index > -1) {
+          return true;
+        }else{
+          return false;
+        }
+      }
+      cadastro.adicionarAluno(dataTeste.cadastro.entrada.id);
+      assert.ok(verificaAlunoListaCadastro(dataTeste.cadastro.entrada.id)==dataTeste.cadastro.resultadoEsperado.adicionado ,"Passou! "+dataTeste.cadastro.entrada.id+ " Esta para ser cadastrado");
+      cadastro.removerAluno(dataTeste.cadastro.entrada.id);
+      assert.ok(verificaAlunoListaCadastro(dataTeste.cadastro.entrada.id)==dataTeste.cadastro.resultadoEsperado.removido ,"Passou! "+dataTeste.cadastro.entrada.id+ " Não esta mais para ser cadastrado");
+
 
 });

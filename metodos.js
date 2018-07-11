@@ -46,7 +46,7 @@ function bateHorario(turmaTentativa, turmaCadastrada) {
 
 //recebe uma lista de alunos e retorna apenas os que não estão matriculados na turma com id passado como paramento
 function filtrarAlunos(alunos,idTurma){
-  return _.filter(alunos,function(o){
+  return alunos.filter(function(o){
    console.log(o);
    if(o.listaTurmas.indexOf(idTurma) == '-1'){
      return o;
