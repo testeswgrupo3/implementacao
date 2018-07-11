@@ -2,8 +2,8 @@
 $( document ).ready( function(){
   $(".grupoAluno").hide();
   var add= "";
-  for(var i=0; i<mockTumas.length;i++){
-    add+="<option value='"+ mockTumas[i].id+"'>"+mockTumas[i].nome+"</option>";
+  for(var i=0; i<turmasFullTeaching.length;i++){
+    add+="<option value='"+ turmasFullTeaching[i].id+"'>"+turmasFullTeaching[i].nome+"</option>";
   }
   $("#turma").append(add);
 
@@ -11,14 +11,14 @@ $( document ).ready( function(){
   $("#btnTurma").click(function(){
     var addAluno= "";
     var b = $("#turma").val();
-    $("#nomeTurma").text(_.find(mockTumas,{"id": b}).nome);
+    $("#nomeTurma").text(_.find(turmasFullTeaching,{"id": b}).nome);
     console.log("b");
     console.log(b);
     cadastro.idTurma=b;
-    var turmaAtual = _.find(mockTumas,{"id": b});
+    var turmaAtual = _.find(turmasFullTeaching,{"id": b});
 
     //lista de alunos que não estão matriculados na turma selecionada
-    var listaAlunosInserir = filtrarAlunos(mockAlunos,b);
+    var listaAlunosInserir = filtrarAlunos(alunosFullTeaching,b);
 
     var listaAlunos = document.querySelector("#listaAlunos");
     for(var i=0; i<listaAlunosInserir.length;i++){
@@ -44,13 +44,13 @@ $( document ).ready( function(){
             //verifica se esta marcado
             if(this.checked){
               var coincide=false;
-              var aluno =_.find( mockAlunos,{"id": idAluno});
+              var aluno =_.find( alunosFullTeaching,{"id": idAluno});
               console.log("<aluno selecionado>");
               console.log(aluno);
               console.log("</aluno selecionado>");
               //verifica se o aluno marcado coicede horário com a turma selecionada
               for(var j = 0; j < aluno.listaTurmas.length; j++){
-                  if (bateHorario(turmaAtual,_.find(mockTumas,{ "id": aluno.listaTurmas[j]}))){
+                  if (bateHorario(turmaAtual,_.find(turmasFullTeaching,{ "id": aluno.listaTurmas[j]}))){
                       coincide = true;
                       break;
                   }
@@ -87,7 +87,7 @@ $( document ).ready( function(){
   //ao clicar no botão salvar para cadastrar os alunos a função abaixo é executada
   $("#btnAlunos").click(function(){
     var idTurma = $("#turma").val();
-    var turma = _.find(mockTumas,{"id": idTurma});
+    var turma = _.find(turmasFullTeaching,{"id": idTurma});
     if(verificaCapacidadeTurma(turma)){
       $("#result").text("");
       $("#result").text(JSON.stringify(cadastro));
