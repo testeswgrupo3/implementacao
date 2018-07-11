@@ -1,10 +1,20 @@
+var cadastro = {
+  idTurma:null,
+  listaAlunos:[],
+  adicionarAluno: function(idAluno){//adiciona id de um aluno na lista de alunos pendentes para o cadastro
+    this.listaAlunos.push(idAluno);
+  },
+  removerAluno: function(idAluno){//remove o id de um aluno da lista de alunos pendentes para cadastro
+    var index = this.listaAlunos.indexOf(idAluno);
+    if ( index > -1) {
+      this.listaAlunos.splice(index, 1);
+    }
+  }
+}
 //converdte a data exibida dos elementos par um objeto que contem os campos ano,mes,dia,hora,mim,seg respectivamente
-function converteData(data){
-  var aux = data.split(" ");
-  var horario = aux[0].split(":");
-  var dia = aux[1].split("-");
-  console.log(dia[2]+" "+dia[1]+" "+dia[0]+" "+horario[0]+" "+horario[1]+" "+horario[2]+" "+0);
-  return{ano:dia[2],mes:dia[1],dia:dia[0],hora:horario[0],min:horario[1],seg:horario[2]}
+function converteHora(hora){
+  var horario =hora.split(":");
+  return{hora:Number(horario[0]),minutos:Number(horario[1])}
 }
 
 //verifica se duas turmas possuem coicidencia de horario
@@ -15,16 +25,18 @@ function bateHorario(turmaTentativa, turmaCadastrada) {
   console.log(turmaCadastrada);
   console.log("</Comparando>");
   for(var j = 0; j < turmaCadastrada.diaHora.length; j++){
-    var dataTurmaCadastrada = converteData(turmaCadastrada.diaHora[j].data);
+    var horarioTurmaCadastrada = converteHora(turmaCadastrada.diaHora[j].horaInicio);
     for(var i = 0; i < turmaTentativa.diaHora.length; i++){
-      var dataTurmaTentativa = converteData(turmaTentativa.diaHora[i].data);
-      if(dataTurmaTentativa.ano == dataTurmaCadastrada.ano){
-        if(dataTurmaTentativa.mes == dataTurmaCadastrada.mes){
-          if(dataTurmaTentativa.dia == dataTurmaCadastrada.dia){
-            if(dataTurmaTentativa.hora == dataTurmaCadastrada.hora){
-                coincide = true;
+      var horarioTurmaTentativa = converteHora(turmaTentativa.diaHora[i].horaInicio);
+      if(turmaCadastrada.diaHora[j].desc == turmaTentativa.diaHora[i].desc){
+        if(horarioTurmaCadastrada.hora == horarioTurmaTentativa.hora){
+            coincide = true;
+        }else{
+            var diferenca = Math.abs((horarioTurmaCadastrada.hora*60+horarioTurmaCadastrada.minutos) - (horarioTurmaTentativa.hora*60+horarioTurmaTentativa.minutos));
+            console.log("Diferenca: "+diferenca);
+            if(diferenca < 120){
+              coincide = true;
             }
-          }
         }
       }
     }
