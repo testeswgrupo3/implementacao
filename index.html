@@ -49,6 +49,22 @@
 			"nome":"New Student",
 			"listaTurmas":["1"]}
 		]
+
+		var cadastro = {
+			idTurma:null,
+			listaAlunos:[],
+			adicionarAluno: function(idAluno){//adiciona id de um aluno na lista de alunos pendentes para o cadastro
+				this.listaAlunos.push(idAluno);
+			},
+			removerAluno: function(idAluno){//remove o id de um aluno da lista de alunos pendentes para cadastro
+				var index = this.listaAlunos.indexOf(idAluno);
+				if ( index > -1) {
+  				this.listaAlunos.splice(index, 1);
+				}
+			}
+		}
+
+		//converdte a data exibida dos elementos par um objeto que contem os campos ano,mes,dia,hora,mim,seg respectivamente
 		function converteData(data){
 			var aux = data.split(" ");
 			var horario = aux[0].split(":");
@@ -56,86 +72,8 @@
 			console.log(dia[2]+" "+dia[1]+" "+dia[0]+" "+horario[0]+" "+horario[1]+" "+horario[2]+" "+0);
 			return{ano:dia[2],mes:dia[1],dia:dia[0],hora:horario[0],min:horario[1],seg:horario[2]}
 		}
-		$( document ).ready( function(){
-			$(".grupoAluno").hide();
-			var add= "";
-			for(var i=0; i<mockTumas.length;i++){
-				add+="<option value='"+ mockTumas[i].id+"'>"+mockTumas[i].nome+"</option>";
-			}
-			$("#turma").append(add);
-			$("#btnTurma").click(function(){
-				var addAluno= "";
-				var b = $("#turma").val();
-				console.log("b");
-				console.log(b);
-				var listaAlunosInserir = _.filter(mockAlunos,function(o){
-					console.log(o);
-					if(o.listaTurmas.indexOf(b) == '-1'){
-						return o;
-					}
-				})
-				for(var i=0; i<listaAlunosInserir.length;i++){
-					addAluno+="<div><input type='checkbox' data-numAluno='aluno"+(i+1)+"' data-vlId="+listaAlunosInserir[i].id+" id='aluno"+listaAlunosInserir[i].id+"'> <label for='aluno"+listaAlunosInserir[i].id+"'>"+listaAlunosInserir[i].nome+"</label></div>";
 
-
-				}
-				$("#listaAlunos").append(addAluno);
-				$("#nomeTurma").text(_.find(mockTumas,{"id": b}).nome);
-				$(".grupoAluno").show();
-				$(".grupoTurma").hide();
-			})
-
-			$("#btnAlunos").click(function(){
-				// console.log();
-
-				var size = $("#listaAlunos").find("input").length;
-				var ids = [];
-				var turmasBateHorario = [];
-				var idTurma = $("#turma").val();
-				var turma = _.find(mockTumas,{"id": idTurma});
-
-				for (var i = 1; i <= size; i++) {
-
-					if($("[data-numAluno='aluno"+i+"']").is(':checked')){
-						var idAluno = $("[data-numAluno='aluno"+i+"']").attr('data-vlId');
-						var aluno = _.find(mockAlunos,{"id": idAluno});
-						if (aluno.listaTurmas.indexOf(idTurma) == '-1'){
-
-							var btH = false;
-							for(var j = 0, length1 = aluno.listaTurmas.length; j < length1; j++){
-								var turmaJ = _.find(mockTumas,{"id": aluno.listaTurmas[j]});
-								if (bateHorario(turma,turmaJ)) {
-									btH = true;
-									break;
-								}
-
-							}
-							if(!btH){
-								ids.push('"'+idAluno+'"');
-							}else{
-								alert("O aluno "+aluno.nome+" tem aula nesse horario");
-							}
-						}else{
-							// console.log("ja existe")
-							alert(aluno.nome + " já existe nessa turma");
-
-						}
-					}
-				}
-				if((Number(turma.quantidadeAlunosCadastrados) + ids.length) <= Number(turma.quantidadeMaxAlunos)){
-					var result = '{';
-					result += '"idTurma": ' + '"'+$("#turma").val()+'",';
-					result += '"listaAlunos" :[ '+String(ids);
-					result+= ']}';
-					$("#result").text("");
-					$("#result").append(result);
-				}else{
-					alert("Número máximo de alunos atingido");
-				}
-			})
-			// console.log("bate Horario");
-			// console.log(bateHorario(mockTumas[0],mockTumas[2]));
-		})
+		//verifica se duas turmas possuem coicidencia de horario
 		function bateHorario(turmaTentativa, turmaCadastrada) {
 			var coincide = false;
 			console.log("<Comparando>");
@@ -159,6 +97,121 @@
 			}
 			return coincide;
 		}
+
+		//recebe uma lista de alunos e retorna apenas os que não estão matriculados na turma com id passado como paramento
+		function filtrarAlunos(alunos,idTurma){
+			return _.filter(alunos,function(o){
+			 console.log(o);
+			 if(o.listaTurmas.indexOf(idTurma) == '-1'){
+				 return o;
+			 }
+		 })
+		}
+
+		//verifica se a turma possui capacidade para todos os alunos com cadastro para serem realizados
+		function verificaCapacidadeTurma(turma){
+			if((Number(turma.quantidadeAlunosCadastrados) + cadastro.listaAlunos.length) <= Number(turma.quantidadeMaxAlunos)){
+				return true;
+			}else return false;
+		}
+
+		$( document ).ready( function(){
+			$(".grupoAluno").hide();
+			var add= "";
+			for(var i=0; i<mockTumas.length;i++){
+				add+="<option value='"+ mockTumas[i].id+"'>"+mockTumas[i].nome+"</option>";
+			}
+			$("#turma").append(add);
+
+			//função que dispara ao clicar no botao para selecionar turma
+			$("#btnTurma").click(function(){
+				var addAluno= "";
+				var b = $("#turma").val();
+				$("#nomeTurma").text(_.find(mockTumas,{"id": b}).nome);
+				console.log("b");
+				console.log(b);
+				cadastro.idTurma=b;
+				var turmaAtual = _.find(mockTumas,{"id": b});
+
+				//lista de alunos que não estão matriculados na turma selecionada
+				var listaAlunosInserir = filtrarAlunos(mockAlunos,b);
+
+				var listaAlunos = document.querySelector("#listaAlunos");
+				for(var i=0; i<listaAlunosInserir.length;i++){
+					var div = document.createElement("div");
+					var input= document.createElement("input");
+					var label = document.createElement("label");
+
+					//criando o input
+					input.setAttribute("type",'checkbox');
+					var dataNumAluno = document.createAttribute('data-numAluno');
+					dataNumAluno.value = 'aluno'+(i+1);
+					input.setAttributeNode(dataNumAluno);
+					var dataVlId = document.createAttribute("data-vlId");
+					dataVlId.value =  listaAlunosInserir[i].id;
+					input.setAttributeNode(dataVlId);
+					var id = document.createAttribute("id");
+					id.value =  'aluno'+listaAlunosInserir[i].id;
+					input.setAttributeNode(id);
+
+					//função que dispara ao clicar no checkbox
+					input.addEventListener("click",(function(idAluno,label){
+						return function(){
+								//verifica se esta marcado
+								if(this.checked){
+									var coincide=false;
+									var aluno =_.find( mockAlunos,{"id": idAluno});
+									console.log("<aluno selecionado>");
+									console.log(aluno);
+									console.log("</aluno selecionado>");
+									//verifica se o aluno marcado coicede horário com a turma selecionada
+									for(var j = 0; j < aluno.listaTurmas.length; j++){
+											if (bateHorario(turmaAtual,_.find(mockTumas,{ "id": aluno.listaTurmas[j]}))){
+													coincide = true;
+													break;
+											}
+									}
+									//se o aluno coincide horario com a turma selecionada desabilita o chekbox
+									if(coincide){
+										alert("O aluno "+aluno.nome+" tem aula nesse horario");
+										label.style.textDecoration= "line-through";
+										this.checked=false;
+										this.removeEventListener("click",arguments.callee);
+										this.disabled = true;
+									}else{//caso não possua coincidencia de horario adiciona o aluno para cadastro
+										cadastro.adicionarAluno(idAluno);
+									}
+								}else{//ao desmarcar o aluno remove o mesmo do cadastro pendente
+									cadastro.removerAluno(idAluno);
+								}
+						}
+					})(listaAlunosInserir[i].id,label));
+
+					//cria o label para cada checkbox
+					label.setAttribute("for","aluno"+listaAlunosInserir[i].id);
+					label.textContent = listaAlunosInserir[i].nome;
+
+					//emenda os elementos
+					div.appendChild(input);
+					div.appendChild(label);
+					listaAlunos.appendChild(div);
+				}
+				$(".grupoAluno").show();
+				$(".grupoTurma").hide();
+			})
+
+			//ao clicar no botão salvar para cadastrar os alunos a função abaixo é executada
+			$("#btnAlunos").click(function(){
+				var idTurma = $("#turma").val();
+				var turma = _.find(mockTumas,{"id": idTurma});
+				if(verificaCapacidadeTurma(turma)){
+					$("#result").text("");
+					$("#result").text(JSON.stringify(cadastro));
+				}else{
+					alert("Número máximo de alunos atingido");
+				}
+			})
+		})
 	</script>
 </head>
 
