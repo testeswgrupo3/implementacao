@@ -1,3 +1,78 @@
+var dataTeste = {
+  convercaoData:{entrada:"09:09:36 27-Nov-50495",saidaEsperada: {ano:"50495",mes:"Nov",dia:"27",hora:"09",min:"09",seg:"36"}},
+  bateHorario:{entrada:[{turmaA:{"id":"5",
+                                    "nome":"Project analisys 2",
+                                    "quantidadeMaxAlunos":74,
+                                    "quantidadeAlunosCadastrados":"4",
+                                    "diaHora":
+                                    [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
+                             ,
+                             turmaB:{"id":"6",
+                                     "nome":"Project analisys 2",
+                                     "quantidadeMaxAlunos":74,
+                                     "quantidadeAlunosCadastrados":"4",
+                                     "diaHora":
+                                     [{"desc":"This is a nice description about this session.","data":"09:50:36 27-Nov-50495"}]}
+                              }
+                            ,
+                            {turmaA:{"id":"58",
+                                    "nome":"Project analisys",
+                                    "quantidadeMaxAlunos":74,
+                                    "quantidadeAlunosCadastrados":"4",
+                                    "diaHora":
+                                    [{"desc":"This is a nice description about this session.","data":"18:09:36 27-Nov-50495"}]}
+                             ,
+                             turmaB:{"id":"6",
+                                     "nome":"Estrutura Dados dois",
+                                     "quantidadeMaxAlunos":74,
+                                     "quantidadeAlunosCadastrados":"4",
+                                     "diaHora":
+                                     [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
+                             }
+                           ], resultadoEsperado:[true,false]},
+  filtrarAlunos:{entrada:{alunos:[{"id":"1",
+                                  "nome":"Student Imprudent",
+                                  "listaTurmas":["1","2"]},
+                                  {"id":"2",
+                                  "nome":"Student Concludent",
+                                  "listaTurmas":["1"]},
+                                  {"id":"4",
+                                  "nome":"New Student",
+                                  "listaTurmas":["1"]}
+                                ],idTurma:"2"},
+                  resultadoEsperado:[{"id":"2",
+                                    "nome":"Student Concludent",
+                                    "listaTurmas":["1"]},
+                                    {"id":"4",
+                                    "nome":"New Student",
+                                    "listaTurmas":["1"]}
+                                  ]},
+  verificarCapacidadeTurma:{entrada:{
+                                      alunos:[{"id":"1",
+                                      "nome":"Student Imprudent",
+                                      "listaTurmas":["1","2"]},
+                                      {"id":"2",
+                                      "nome":"Student Concludent",
+                                      "listaTurmas":["1"]},
+                                      {"id":"4",
+                                      "nome":"New Student",
+                                      "listaTurmas":["1"]}],
+                                      turma: {"id":"6",
+                                              "nome":"Fisica",
+                                              "quantidadeMaxAlunos":74,
+                                              "quantidadeAlunosCadastrados":"72",
+                                              "diaHora":
+                                              [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
+                                      },
+                            resultadoEsperado: false},
+  cadastro:{entrada:{"id":"1",
+                    "nome":"Student Imprudent",
+                    "listaTurmas":["1","2"]},
+            resultadosEspereados:{adicionado: true,removido:false}
+         }
+}
+
+
 QUnit.test( "vrifica se as turmas visualizadas são iguais ao MOK", function( assert ) {
       for(var i=0;i<mockTumas.length;i++){
           assert.ok( $("#turma option")[i+1].textContent == mockTumas[i].nome,"Tuma_"+ mockTumas[i].nome +"_ok!" );
