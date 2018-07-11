@@ -1,35 +1,125 @@
-var dataTeste = {
-  convercaoData:{entrada:"09:09:36 27-Nov-50495",saidaEsperada: {ano:"50495",mes:"Nov",dia:"27",hora:"09",min:"09",seg:"36"}},
-  bateHorario:{entrada:[{turmaA:{"id":"5",
-                                    "nome":"Project analisys 2",
-                                    "quantidadeMaxAlunos":74,
-                                    "quantidadeAlunosCadastrados":"4",
-                                    "diaHora":
-                                    [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
-                             ,
-                             turmaB:{"id":"6",
-                                     "nome":"Project analisys 2",
-                                     "quantidadeMaxAlunos":74,
-                                     "quantidadeAlunosCadastrados":"4",
-                                     "diaHora":
-                                     [{"desc":"This is a nice description about this session.","data":"09:50:36 27-Nov-50495"}]}
-                              }
-                            ,
-                            {turmaA:{"id":"58",
-                                    "nome":"Project analisys",
-                                    "quantidadeMaxAlunos":74,
-                                    "quantidadeAlunosCadastrados":"4",
-                                    "diaHora":
-                                    [{"desc":"This is a nice description about this session.","data":"18:09:36 27-Nov-50495"}]}
-                             ,
-                             turmaB:{"id":"6",
-                                     "nome":"Estrutura Dados dois",
-                                     "quantidadeMaxAlunos":74,
-                                     "quantidadeAlunosCadastrados":"4",
-                                     "diaHora":
-                                     [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
-                             }
-                           ], resultadoEsperado:[true,false]},
+var dataTeste =
+{
+  convercaoHora:{entrada:"09:09",resultadoEsperado: {hora: 9,minutos:9}},
+  bateHorario:{classesEquivalencia: {entrada:[  {
+                                                //duas turmas com coicidencia de horario
+                                                    turmaA:{"id":"0",
+                                                      		"nome":"Estrutura de dados",
+                                                      		"quantidadeMaxAlunos":71,
+                                                      		"quantidadeAlunosCadastrados":"0",
+                                                      		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                     ,
+                                                     turmaB:{"id":"1",
+                                                       		"nome":"Fisica",
+                                                       		"quantidadeMaxAlunos":71,
+                                                       		"quantidadeAlunosCadastrados":"0",
+                                                       		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                },
+                                                {
+                                                  //Duas turmas sem coicidencia de horário em dias diferentes
+                                                    turmaA:{"id":"0",
+                                                      		"nome":"Estrutura de Dados",
+                                                      		"quantidadeMaxAlunos":71,
+                                                      		"quantidadeAlunosCadastrados":"0",
+                                                      		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                     ,
+                                                    turmaB:{"id":"1",
+                                                      		"nome":"Fisica",
+                                                      		"quantidadeMaxAlunos":71,
+                                                      		"quantidadeAlunosCadastrados":"0",
+                                                      		"diaHora":[{"desc":"Mon","horaInicio":"13:27"}]}
+                                                  }
+                                               ],
+                                          resultadoEsperado:[true,false]},
+                    analiseValorLimite:{entrada:[
+                                                  {
+                                                    //Duas turmas em dias diferentes com diferença de 1 hora e 59 minutos
+                                                      turmaA:{"id":"0",
+                                                            "nome":"Estrutura de dados",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                            "nome":"Fisica",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Mon","horaInicio":"18:26"}]}
+                                                  },
+                                                  {
+                                                    //Duas Turmas em dias diferentes com diferença de 2 horas
+                                                      turmaA:{"id":"0",
+                                                            "nome":"Estrutura de dados",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                            "nome":"Fisica",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Mon","horaInicio":"18:27"}]}
+                                                  },
+                                                  {
+                                                    //Duas Turmas em dias diferentes com diferença de 2 horas e 1 minuto
+                                                      turmaA:{"id":"0",
+                                                            "nome":"Estrutura de dados",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                            "nome":"Fisica",
+                                                            "quantidadeMaxAlunos":71,
+                                                            "quantidadeAlunosCadastrados":"0",
+                                                            "diaHora":[{"desc":"Mon","horaInicio":"18:28"}]}
+                                                  },
+                                                  {
+                                                    //Duas no mesmo dia com diferença de 1 hora e 59 minutos
+                                                      turmaA:{"id":"0",
+                                                        		"nome":"Estrutura de dados",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                        		"nome":"Fisica",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"18:26"}]}
+                                                  },
+                                                  {
+                                                    //Duas no mesmo dia com diferença de 2 horas
+                                                      turmaA:{"id":"0",
+                                                        		"nome":"Estrutura de dados",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                        		"nome":"Fisica",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"18:27"}]}
+                                                  },
+                                                  {
+                                                    //Duas no mesmo dia com diferença de 2 horas e 1 minuto
+                                                      turmaA:{"id":"0",
+                                                        		"nome":"Estrutura de dados",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"16:27"}]}
+                                                       ,
+                                                      turmaB:{"id":"1",
+                                                        		"nome":"Fisica",
+                                                        		"quantidadeMaxAlunos":71,
+                                                        		"quantidadeAlunosCadastrados":"0",
+                                                        		"diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                                  }
+                                                 ],
+                                            resultadoEsperado:[false,false,false,true,false,false]}
+
+              },
   filtrarAlunos:{entrada:{alunos:[{"id":"1",
                                   "nome":"Student Imprudent",
                                   "listaTurmas":["1","2"]},
@@ -47,24 +137,100 @@ var dataTeste = {
                                     "nome":"New Student",
                                     "listaTurmas":["1"]}
                                   ]},
-  verificarCapacidadeTurma:{entrada:{
-                                      alunos:[{"id":"1",
-                                      "nome":"Student Imprudent",
-                                      "listaTurmas":["1","2"]},
-                                      {"id":"2",
-                                      "nome":"Student Concludent",
-                                      "listaTurmas":["1"]},
-                                      {"id":"4",
-                                      "nome":"New Student",
-                                      "listaTurmas":["1"]}],
-                                      turma: {"id":"6",
-                                              "nome":"Fisica",
-                                              "quantidadeMaxAlunos":74,
-                                              "quantidadeAlunosCadastrados":"72",
-                                              "diaHora":
-                                              [{"desc":"This is a nice description about this session.","data":"09:09:36 27-Nov-50495"}]}
-                                      },
-                            resultadoEsperado: false},
+  verificarCapacidadeTurma:{classesEquivalencia:
+                              {entrada:[
+                                        {
+                                          //Matricular um numero de alunos que supere a capacidade da turma
+                                          alunos:[{"id":"1",
+                                          "nome":"Student Imprudent",
+                                          "listaTurmas":["1","2"]},
+                                          {"id":"2",
+                                          "nome":"Student Concludent",
+                                          "listaTurmas":["1"]},
+                                          {"id":"4",
+                                          "nome":"New Student",
+                                          "listaTurmas":["1"]}],
+                                          turma: {"id":"1",
+                                                "nome":"Fisica",
+                                                "quantidadeMaxAlunos":71,
+                                                "quantidadeAlunosCadastrados":"70",
+                                                "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                          },
+                                          {
+                                            //Matricular um numero de alunos que nao supere a capacidade da turma
+                                            alunos:[{"id":"1",
+                                            "nome":"Student Imprudent",
+                                            "listaTurmas":["1","2"]},
+                                            {"id":"2",
+                                            "nome":"Student Concludent",
+                                            "listaTurmas":["1"]},
+                                            {"id":"4",
+                                            "nome":"New Student",
+                                            "listaTurmas":["1"]}],
+                                            turma: {"id":"1",
+                                                  "nome":"Fisica",
+                                                  "quantidadeMaxAlunos":71,
+                                                  "quantidadeAlunosCadastrados":"0",
+                                                  "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                            }
+                                        ],
+                              resultadoEsperado: [true,false]},
+                        analiseValorLimite:{entrada:[
+                                            {
+                                              //Matricular um numero de alunos que não supere em 1 a capacidade da turma
+                                              alunos:[{"id":"1",
+                                              "nome":"Student Imprudent",
+                                              "listaTurmas":["1","2"]},
+                                              {"id":"2",
+                                              "nome":"Student Concludent",
+                                              "listaTurmas":["1"]},
+                                              {"id":"4",
+                                              "nome":"New Student",
+                                              "listaTurmas":["1"]}],
+                                              turma: {"id":"1",
+                                                    "nome":"Fisica",
+                                                    "quantidadeMaxAlunos":70,
+                                                    "quantidadeAlunosCadastrados":"66",
+                                                    "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                              },
+                                              {
+                                                //Matricular um numero de alunos que atinga a capaciadade da turma
+                                                alunos:[{"id":"1",
+                                                "nome":"Student Imprudent",
+                                                "listaTurmas":["1","2"]},
+                                                {"id":"2",
+                                                "nome":"Student Concludent",
+                                                "listaTurmas":["1"]},
+                                                {"id":"4",
+                                                "nome":"New Student",
+                                                "listaTurmas":["1"]}],
+                                                turma: {"id":"1",
+                                                      "nome":"Fisica",
+                                                      "quantidadeMaxAlunos":71,
+                                                      "quantidadeAlunosCadastrados":"68",
+                                                      "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                                },
+                                                {
+                                                  //Matricular um numero de alunos que supere em 1 a capaciadade da turma
+                                                  alunos:[{"id":"1",
+                                                  "nome":"Student Imprudent",
+                                                  "listaTurmas":["1","2"]},
+                                                  {"id":"2",
+                                                  "nome":"Student Concludent",
+                                                  "listaTurmas":["1"]},
+                                                  {"id":"4",
+                                                  "nome":"New Student",
+                                                  "listaTurmas":["1"]}],
+                                                  turma: {"id":"1",
+                                                        "nome":"Fisica",
+                                                        "quantidadeMaxAlunos":71,
+                                                        "quantidadeAlunosCadastrados":"69",
+                                                        "diaHora":[{"desc":"Thu","horaInicio":"18:28"}]}
+                                                  }
+                                                ],
+                                  resultadoEsperado:[false,false,true]}
+                        },
+
   cadastro:{entrada:{"id":"1",
                     "nome":"Student Imprudent",
                     "listaTurmas":["1","2"]},
@@ -73,78 +239,31 @@ var dataTeste = {
 }
 
 
-QUnit.test( "vrifica se as turmas visualizadas são iguais ao MOK", function( assert ) {
-      for(var i=0;i<mockTumas.length;i++){
-          assert.ok( $("#turma option")[i+1].textContent == mockTumas[i].nome,"Tuma_"+ mockTumas[i].nome +"_ok!" );
-          assert.ok( $("#turma option")[i+1].value == mockTumas[i].id,"Id_" +mockTumas[i].id +"_ok!" );
-      }
+QUnit.test( "Testa Formatação de hora", function( assert ) {
+      var resultado = converteHora(dataTeste.convercaoHora.entrada);
+      assert.ok( (resultado.hora==dataTeste.convercaoHora.resultadoEsperado.hora)&&(resultado.minutos==dataTeste.convercaoHora.resultadoEsperado.minutos),"Formatação de hora Passou!")
 });
 
-function verificaAlunoTurma(idTurma,aluno){
-  for (var i =0; i<  aluno.listaTurmas.length;i++){
-    if(aluno.listaTurmas[i]==idTurma){
-      return true;
-    }
-  }
-  return false;
-}
-  var idTuma = "2";
-QUnit.test( "verifica se é possivel selecionar uma turma", function( assert ) {
-      $("#turma").val(idTuma);
-      $("#btnTurma").click();
-      var turma = _.find(mockTumas,{"id" : idTuma});
-      assert.ok($("span#nomeTurma").text()==turma.nome,"Turma: "+turma.nome+" selecionada corretamente");
+QUnit.test( "Testa Bate horario", function( assert ) {
+      //Iniciando os dados para a realizacao dos teste
+      var dadosClasseEquivalencia = dataTeste.bateHorario.classesEquivalencia;
+      var dadosValorLimite = dataTeste.bateHorario.analiseValorLimite;
+      var numTestesClasseEquivalencia = dadosClasseEquivalencia.entrada.length;
+      var numTestesValorLimite =  dadosValorLimite.entrada.length;
 
-});
-QUnit.test( "vrifica se os alunos visualizados não pertencem a turma selecionada", function( assert ) {
-      var list = $("#listaAlunos div input");
-      if(list.length>0){
-        for(var i=0;i<list.length;i++){
-            assert.notOk( verificaAlunoTurma(idTuma,_.find(mockAlunos,{"id": list[i].getAttribute("data-vlid")})),"Aluno_"+ list[i].getAttribute("data-vlid") +"_ok!" );
-        }
-      }else{
-        var cont = 0;
-        for(var i=0;i<mockAlunos.length;i++){
-            assert.ok( verificaAlunoTurma(idTuma,mockAlunos[i]),"Aluno_"+ mockAlunos[i].id +"_pertence a turma!" );
-            cont++;
-        }
-          assert.ok( cont == mockAlunos.length,"Todos os alunos já estão nesta turma" );
+      //Efetuando os testes com classe de classes equivalencia
+      for(var i=0;i<numTestesClasseEquivalencia;i++){
+        var resultado = bateHorario(dadosClasseEquivalencia.entrada[i].turmaA,dadosClasseEquivalencia.entrada[i].turmaB);
+        var notificacao = {t1: dadosClasseEquivalencia.entrada[i].turmaA.diaHora, t2: dadosClasseEquivalencia.entrada[i].turmaB.diaHora,bateHorario:resultado};
+        assert.ok(resultado==dadosClasseEquivalencia.resultadoEsperado[i] ,"Passou! "+JSON.stringify(notificacao))
       }
 
-});
+      //Efetuando os testes com análise do valor limite
+      for(var i=0;i<numTestesValorLimite;i++){
+        var resultado = bateHorario(dadosValorLimite.entrada[i].turmaA,dadosValorLimite.entrada[i].turmaB);
+        var notificacao = {t1: dadosValorLimite.entrada[i].turmaA.diaHora, t2: dadosValorLimite.entrada[i].turmaB.diaHora,bateHorario:resultado};
+        assert.ok(resultado==dadosValorLimite.resultadoEsperado[i] ,"Passou! "+JSON.stringify(notificacao))
 
-function alunoDisponivel(aluno,turma){
-  for(var j = 0; j < aluno.listaTurmas.length; j++){
-    var turmaJ = _.find(mockTumas,{"id": aluno.listaTurmas[j]});
-    console.log(turmaJ);
-    if (bateHorario(turmaJ,turma)) {
-      return false;
-    }
-  }
-  return true;
-}
-
-QUnit.test( "verifica se os alunos a serem inseridos não possuem coincidencia de horário", function( assert ) {
-
-      var list = $("#listaAlunos div input");
-      if(list.length>0){
-        for(var i=0;i<list.length;i++){
-            list[i].click();
-        }
-        $("#btnAlunos").click();
-
-        console.log($("#result").text());
-        var resultado = JSON.parse($("#result").text());
-        var turmaAtual = _.find(mockTumas,{"id": resultado.idTurma});
-        console.log("TurmaAtual");
-        console.log(turmaAtual);
-        for(var i=0;i<resultado.listaAlunos.length;i++){
-            var alunoAtual = _.find(mockAlunos,{"id": resultado.listaAlunos[i]});
-            console.log(alunoAtual);
-            assert.ok( alunoDisponivel(alunoAtual,turmaAtual),"Aluno "+ alunoAtual.id+" está Disponivel");
-        }
-      }else{
-        assert.ok( list.length==0,"Não é possivel inserir nenhum aluno na turma");
       }
 
 });
