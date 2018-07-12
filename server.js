@@ -16,7 +16,11 @@ var alunos= [
   ]
 const server = http.createServer((req, res) => {
   console.log('Recebendo uma request para '+ req.url)
-  if (req.url != null) {
+  if (req.url == "/") {
+     fs.readFile(__dirname + "/index.html", function(err, data){
+       res.end(data);
+     });
+  }else if (req.url != null) {
      fs.readFile(__dirname + req.url, function(err, data){
        res.end(data);
      });
