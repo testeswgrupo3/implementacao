@@ -1,5 +1,5 @@
 const http = require('http')
-var port = process.env.PORT || 3000
+var port = process.env.PORT
 const ip = 'localhost'
 var fs = require('fs')
 
@@ -17,11 +17,11 @@ var alunos= [
 const server = http.createServer((req, res) => {
   console.log('Recebendo uma request para '+ req.url)
   if (req.url == "/") {
-     fs.readFile(__dirname + "/index.html", function(err, data){
+     fs.readFile("./index.html", function(err, data){
        res.end(data);
      });
   }else if (req.url != null) {
-     fs.readFile(__dirname + req.url, function(err, data){
+     fs.readFile("./"+req.url, function(err, data){
        res.end(data);
      });
   }else if("/alunos.json"){
