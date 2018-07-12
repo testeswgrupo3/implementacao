@@ -1,5 +1,5 @@
 const http = require('http')
-var porta = process.env.PORT || 3000
+var port = process.env.PORT || 3000
 const ip = 'localhost'
 var fs = require('fs')
 
