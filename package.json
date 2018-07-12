@@ -1,0 +1,20 @@
+{
+  "name": "trabalho-ts",
+  "version": "1.0.0",
+  "description": "Trabalho de implementação da diciplina de teste de software",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/testeswgrupo3/implementacao.git"
+  },
+  "author": "grupo3",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/testeswgrupo3/implementacao/issues"
+  },
+  "homepage": "https://github.com/testeswgrupo3/implementacao#readme"
+}
